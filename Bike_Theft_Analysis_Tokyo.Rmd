@@ -1,0 +1,61 @@
+---
+title: "Bike Theft Analysis in Tokyo"
+author: "Shruti Kasera"
+date: "2026-05-05"
+output: html_document
+---
+
+## Project Overview
+This project analyzes the spatial distribution of daytime bike thefts across Tokyo's regions using R. Data was sourced from official Japanese government records and visualized using the 'sf' and 'mapview' packages. 
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readxl)
+library(spData)
+library(sf)
+library(dplyr)
+library(mapview)
+```
+
+## Load Data 
+``` {r load-data}
+bike_thefts <- read_excel('data/Bike Theft.xlsx')
+daytime_pop <- read_excel('data/Daytime Population.xlsx', skip = 1)
+regions <- st_read('data/Region Shapefiles/gadm41_JPN_2.shp')
+```
+
+## Filter Tokyo Regions
+``` {r tokyo-filter}
+tokyo_regions <- subset(regions, NAME_1 == "Tokyo")
+mapview(tokyo_regions, zcol = "NAME_2")
+```
+
+## Bike Theft by Region
+``` {r theft-summary}
+bike_thefts_summary %
+  group_by(...7) %>%
+  summarise(total= n())
+
+tokyo_regions_joined <- left_join (
+  tokyo_regions,
+  bike_thefts_summary,
+  by = c("NL_NAME_2"= "...7")
+) %>% na.omit()
+
+mapview(tokyo_regions_joined, zcol = "total")
+```
+
+## Daytime Population vs. Bike Thefts 
+``` {r population-join}
+tokyo_pop_joined <- left_join(
+  tokyo_regions_joined,
+  daytime_pop,
+  by = c("NL_NAME_2" = "Name")
+)
+mapview(tokyo_pop_joined, zcol = "2020年") +
+  mapview(tokyo_regions_joined, zcol = "total")
+```
+
+##END
