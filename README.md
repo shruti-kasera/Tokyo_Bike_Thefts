@@ -5,11 +5,11 @@ The data cleansing and analysis have been conducted using R, with a focus on geo
 
 ## Tools
 <ul>
-  <li>'R'</li>
-  <li>'sf'</li>
-  <li>'mapview'</li>
-  <li>'readxl'</li>
-  <li>'dplyr'</li>
+  <li>`R`</li>
+  <li>`sf`</li>
+  <li>`mapview`</li>
+  <li>`readxl`</li>
+  <li>`dplyr`</li>
 </ul>
 
 ## Data
